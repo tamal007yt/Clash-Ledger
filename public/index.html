@@ -6,181 +6,277 @@
 <meta name="theme-color" content="#10182b">
 <title>ClashLedger</title>
 <style>
+/* billy wonder */
 :root{--bg:#10182b;--panel:#1e2a40;--field:#10182b;--line:#34415a;--blue:#35b8f5;--green:#12b886;--red:#e05260;--muted:#9aa8bd}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px}
-header{max-width:720px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between}
-.brand{font-weight:850;font-size:22px;letter-spacing:.3px}.brand span{color:var(--blue)}
+header{max-width:720px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.billy-brand{font-weight:850;font-size:22px;letter-spacing:.3px}.billy-brand span{color:var(--blue)}
 main{max-width:720px;margin:auto;background:var(--panel);border:1px solid #2b3850;border-radius:25px;padding:18px;box-shadow:0 16px 40px #0003}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.billy-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
 h1{font-size:22px;color:var(--blue);margin:0}
 button,input{font:inherit}button{border:0;cursor:pointer}
-.datebtn{background:var(--field);border:1px solid var(--line);border-radius:12px;color:var(--blue);padding:10px 12px}
-.profit{background:linear-gradient(120deg,#078bcb,#2464e8);border-radius:21px;padding:20px;margin-bottom:12px}
-.profit small{font-weight:750;letter-spacing:.5px;color:#e1f5ff}.amount{font-size:38px;font-weight:850;margin-top:5px;overflow-wrap:anywhere}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 20px}
-.stat{background:var(--field);padding:13px;border-radius:14px;min-width:0}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:19px;margin-top:4px;overflow-wrap:anywhere}
+.billy-datebtn{background:var(--field);border:1px solid var(--line);border-radius:12px;color:var(--blue);padding:10px 12px}
+.billy-profit{background:linear-gradient(120deg,#078bcb,#2464e8);border-radius:21px;padding:20px;margin-bottom:12px}
+.billy-profit small{font-weight:750;letter-spacing:.5px;color:#e1f5ff}.billy-amount{font-size:38px;font-weight:850;margin-top:5px;overflow-wrap:anywhere}
+.billy-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 20px}
+.billy-stat{background:var(--field);padding:13px;border-radius:14px;min-width:0}.billy-stat small{display:block;color:var(--muted);font-size:12px}.billy-stat strong{display:block;font-size:19px;margin-top:4px;overflow-wrap:anywhere}
 h2{font-size:16px;margin:20px 0 10px}
-.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.billy-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 input{width:100%;background:var(--field);color:white;border:1px solid var(--line);border-radius:13px;padding:14px;outline:none;min-width:0}
 input:focus{border-color:var(--blue)}input::placeholder{color:#78859b}
-.primary{width:100%;padding:15px;border-radius:14px;background:var(--green);color:white;font-weight:800;margin-top:10px}
-.tablehead,.entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center}
-.tablehead{color:var(--muted);font-size:12px;font-weight:750;padding:0 8px 8px}
-.entry{background:var(--field);border:1px solid #2b3850;border-radius:14px;padding:11px 8px 11px 12px;margin-bottom:8px}
-.entryname{font-weight:750;overflow-wrap:anywhere}.sub{font-size:10px;color:#8794a9;margin-top:3px}
-.entryprofit{font-weight:800;white-space:nowrap}.pos{color:#32d296}.neg{color:#ff6b75}
-.del{background:#422632;color:#ff7580;border-radius:10px;padding:8px 10px;font-size:17px}
-.empty{text-align:center;color:#8995a9;padding:25px 5px}
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
-.nav button{background:#26354d;color:#dce8f8;border-radius:10px;padding:9px 13px}
+.billy-primary{width:100%;padding:15px;border-radius:14px;background:var(--green);color:white;font-weight:800;margin-top:10px}
+.billy-tablehead,.billy-entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center}
+.billy-tablehead{color:var(--muted);font-size:12px;font-weight:750;padding:0 8px 8px}
+.billy-entry{background:var(--field);border:1px solid #2b3850;border-radius:14px;padding:11px 8px 11px 12px;margin-bottom:8px}
+.billy-entryname{font-weight:750;overflow-wrap:anywhere}.billy-sub{font-size:10px;color:#8794a9;margin-top:3px}
+.billy-entryprofit{font-weight:800;white-space:nowrap}.billy-pos{color:#32d296}.billy-neg{color:#ff6b75}
+.billy-del{background:#422632;color:#ff7580;border-radius:10px;padding:8px 10px;font-size:17px}
+.billy-empty{text-align:center;color:#8995a9;padding:25px 5px}
+.billy-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+.billy-nav button{background:#26354d;color:#dce8f8;border-radius:10px;padding:9px 13px}
 /* billy wonder - login/logout + status styles */
 .billy-status{font-size:12px;margin-top:12px;text-align:center;color:var(--muted)}.billy-status.billy-bad{color:#ffb4ba}
 .billy-hide{display:none!important}.billy-who{display:flex;align-items:center;gap:8px;font-size:12px;color:#9fb0c8}.billy-who button{background:#26354d;color:#dce8f8;border-radius:9px;padding:6px 10px;font-size:12px}
-.foot{text-align:center;color:#748198;font-size:11px;margin:14px auto 0;max-width:720px}
-@media(max-width:420px){body{padding:10px}main{padding:13px}.top{align-items:flex-start;flex-direction:column}h1{font-size:21px}.datebtn{align-self:flex-end}.amount{font-size:34px}.entry{gap:5px;padding-left:9px}.entryprofit{font-size:13px}}
+.billy-foot{text-align:center;color:#748198;font-size:11px;margin:14px auto 0;max-width:720px}
+@media(max-width:420px){body{padding:10px}main{padding:13px}.billy-top{align-items:flex-start;flex-direction:column}h1{font-size:21px}.billy-datebtn{align-self:flex-end}.billy-amount{font-size:34px}.billy-entry{gap:5px;padding-left:9px}.billy-entryprofit{font-size:13px}}
+.billy-by{font-size:11px;font-weight:600;letter-spacing:0;color:var(--muted);margin-left:4px;white-space:nowrap}
+/* billy wonder - calendar */
+.billy-calover{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+.billy-cal{width:100%;max-width:420px;background:#17213a;border:1px solid #34415a;border-radius:20px;padding:14px}
+.billy-calhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.billy-calhead button{background:#26354d;color:#dce8f8;border-radius:10px;width:40px;height:36px;font-size:18px}
+.billy-caltitle{font-weight:800;font-size:16px}
+.billy-calsum{display:flex;justify-content:space-between;gap:8px;margin:12px 0;padding:10px 12px;border-radius:12px;background:#10182b;font-size:12px;color:var(--muted)}
+.billy-calsum b{font-size:15px}
+.billy-calweek,.billy-calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.billy-calweek span{text-align:center;font-size:10px;color:#6f7d94;padding:2px 0 6px;letter-spacing:.5px}
+.billy-calcell{position:relative;min-height:52px;border:1px solid #2b3850;border-radius:6px;background:transparent;color:#cdd8ea;padding:4px 3px;text-align:left;display:flex;flex-direction:column;justify-content:space-between}
+.billy-calcell small{font-size:9.5px;font-weight:800;text-align:right;line-height:1;overflow:hidden;white-space:nowrap}
+.billy-calcell i{font-style:normal;font-size:11px;font-weight:700;line-height:1}
+.billy-calcell.billy-gain{background:#12b88626;border-color:#12b88666}.billy-calcell.billy-gain small{color:#4fe3b0}
+.billy-calcell.billy-lose{background:#e0526030;border-color:#e0526077}.billy-calcell.billy-lose small{color:#ff8a93}
+.billy-calcell.billy-flat small{color:#9aa8bd}
+.billy-calcell.billy-now i::after{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--blue);margin-left:3px;vertical-align:middle}
+.billy-calcell.billy-pick{outline:2px solid var(--blue);outline-offset:1px;background-image:linear-gradient(#35b8f533,#35b8f533)}
+.billy-calblank{min-height:52px}
+.billy-calclose{width:100%;margin-top:12px;padding:11px;border-radius:12px;background:#26354d;color:#dce8f8}
 </style>
 </head>
 <body>
-<header><div class="brand">⚔️ <span>Clash</span>Ledger</div><div id="who" class="billy-who billy-hide"><span id="uname"></span><button id="logout">Logout</button></div></header>
+<header><div class="billy-brand">⚔️ <span>Clash</span>Ledger <small class="billy-by">by Tamal 007</small></div><div id="who" class="billy-who billy-hide"><span id="uname"></span><button id="logout">Logout</button></div></header>
 <!-- billy wonder: login box -->
 <main id="authBox">
   <h1 style="margin-bottom:6px">Welcome</h1>
   <div style="color:var(--muted);font-size:13px;margin-bottom:14px">Log in, or create an account. Each account sees only its own ledger.</div>
   <input id="au" placeholder="Username" autocomplete="username" maxlength="20" autocapitalize="none">
   <input id="ap" type="password" placeholder="Password (min 6)" autocomplete="current-password" style="margin-top:9px">
-  <button class="primary" id="doLogin">Login</button>
-  <button class="primary" id="doReg" style="background:#26354d">Create account</button>
+  <button class="billy-primary" id="doLogin">Login</button>
+  <button class="billy-primary" id="doReg" style="background:#26354d">Create account</button>
   <div id="authMsg" class="billy-status"></div>
 </main>
 <main id="app" class="billy-hide">
-  <div class="top">
+  <div class="billy-top">
     <h1>Accounts Ledger</h1>
-    <input id="date" class="datebtn" type="date" aria-label="Choose date">
+    <button id="dateBtn" class="billy-datebtn" aria-label="Choose date">📅</button>
   </div>
-  <section class="profit"><small>SELECTED DAY'S NET PROFIT</small><div id="totalProfit" class="amount">$0.00</div></section>
-  <section class="stats">
-    <div class="stat"><small>Total Investment</small><strong id="investment">$0.00</strong></div>
-    <div class="stat"><small>Total Revenue</small><strong id="revenue">$0.00</strong></div>
-    <div class="stat"><small>Items Sold</small><strong id="qtyTotal">0</strong></div>
-    <div class="stat"><small>Entries</small><strong id="entryTotal">0</strong></div>
+  <section class="billy-profit"><small>SELECTED DAY'S NET PROFIT</small><div id="totalProfit" class="billy-amount">$0.00</div></section>
+  <section class="billy-stats">
+    <div class="billy-stat"><small>Total Investment</small><strong id="investment">$0.00</strong></div>
+    <div class="billy-stat"><small>Total Revenue</small><strong id="revenue">$0.00</strong></div>
+    <div class="billy-stat"><small>Items Sold</small><strong id="qtyTotal">0</strong></div>
+    <div class="billy-stat"><small>Entries</small><strong id="entryTotal">0</strong></div>
   </section>
   <h2>Add Trading Entry</h2>
-  <div class="formgrid">
+  <div class="billy-formgrid">
     <input id="item" placeholder="Item (e.g. Gold Pass)" maxlength="70">
-    <input id="qty" type="number" min="1" step="1" value="1" placeholder="Quantity">
-    <input id="buy" type="number" min="0" step="0.01" value="5" placeholder="Buy price ($)">
-    <input id="sell" type="number" min="0" step="0.01" value="6" placeholder="Sell price ($)">
+    <input id="qty" type="number" min="1" step="1" placeholder="Quantity">
+    <input id="buy" type="number" min="0" step="0.01" placeholder="Buy price ($)">
+    <input id="sell" type="number" min="0" step="0.01" placeholder="Sell price ($)">
   </div>
   <input id="note" style="margin-top:9px" placeholder="Note (optional)" maxlength="120">
-  <button class="primary" id="add">＋ Add Entry</button>
+  <button class="billy-primary" id="add">＋ Add Entry</button>
   <h2>Daily Entries</h2>
-  <div class="tablehead"><span>Item Description</span><span>Profit / Loss</span><span></span></div>
+  <div class="billy-tablehead"><span>Item Description</span><span>Profit / Loss</span><span></span></div>
   <div id="entries"></div>
   <div id="status" class="billy-status"></div>
-  <div class="nav"><button id="prev">← Previous</button><button id="today">Today</button><button id="next">Next →</button></div>
+  <div class="billy-nav"><button id="prev">← Previous</button><button id="today">Today</button><button id="next">Next →</button></div>
 </main>
-<div class="foot">Saved online in your Netlify database</div>
+<!-- billy wonder: calendar -->
+<div id="calOverlay" class="billy-calover billy-hide"><div class="billy-cal">
+  <div class="billy-calhead"><button id="calPrev">‹</button><div id="calTitle" class="billy-caltitle"></div><button id="calNext">›</button></div>
+  <div id="calSum" class="billy-calsum"></div>
+  <div class="billy-calweek"><span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span></div>
+  <div id="calGrid" class="billy-calgrid"></div>
+  <button id="calClose" class="billy-calclose">Close</button>
+</div></div>
+<div class="billy-foot">Saved online in your Netlify database</div>
 <script>
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,'0');
-const localKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-let selected=localKey(new Date());
-let records=[];
-/* billy wonder - login + online save */
-let token=localStorage.getItem('cl_token')||'';
-let username=localStorage.getItem('cl_user')||'';
-$('date').value=selected;
-const money=n=>(n<0?'-$':'$')+Math.abs(n).toFixed(2);
-function status(msg,bad){const e=$('status');e.textContent=msg;e.className='billy-status'+(bad?' billy-bad':'')}
+/* billy wonder */
+const billyEl=id=>document.getElementById(id);
+const billyPad=n=>String(n).padStart(2,'0');
+const billyLocalKey=d=>`${d.getFullYear()}-${billyPad(d.getMonth()+1)}-${billyPad(d.getDate())}`;
+let billySelected=billyLocalKey(new Date());
+let billyRecords=[];
+let billyToken=localStorage.getItem('cl_token')||'';
+let billyUsername=localStorage.getItem('cl_user')||'';
+const billyMoney=n=>(n<0?'-$':'$')+Math.abs(n).toFixed(2);
+function billyStatus(billyMsg,billyBad){const billyE=billyEl('status');billyE.textContent=billyMsg;billyE.className='billy-status'+(billyBad?' billy-bad':'')}
 
-// show login screen
-function showAuth(msg){
-  token='';localStorage.removeItem('cl_token');
-  $('app').classList.add('billy-hide');$('who').classList.add('billy-hide');$('authBox').classList.remove('billy-hide');
-  $('authMsg').textContent=msg||'';$('authMsg').className='billy-status'+(msg?' billy-bad':'');
+function billyShowAuth(billyMsg){
+  billyToken='';localStorage.removeItem('cl_token');
+  billyEl('calOverlay').classList.add('billy-hide');billyEl('app').classList.add('billy-hide');billyEl('who').classList.add('billy-hide');billyEl('authBox').classList.remove('billy-hide');
+  billyEl('authMsg').textContent=billyMsg||'';billyEl('authMsg').className='billy-status'+(billyMsg?' billy-bad':'');
 }
-function showApp(){
-  $('authBox').classList.add('billy-hide');$('app').classList.remove('billy-hide');$('who').classList.remove('billy-hide');
-  $('uname').textContent='👤 '+username;load();
+function billyShowApp(){
+  billyEl('authBox').classList.add('billy-hide');billyEl('app').classList.remove('billy-hide');billyEl('who').classList.remove('billy-hide');
+  billyEl('uname').textContent='👤 '+billyUsername;billyLoad();
 }
 // talks to the netlify function
-async function call(path,method,body,qs){
-  const r=await fetch(path+(qs||''),{method,headers:{'content-type':'application/json',...(token?{authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});
-  const j=await r.json().catch(()=>({}));
-  if(r.status===401&&token){showAuth('Session expired. Please log in again.');throw new Error('Please log in')}
-  if(!r.ok)throw new Error(j.error||('Server error '+r.status));
-  return j;
+async function billyCall(billyPath,billyMethod,billyBody,billyQs){
+  const billyR=await fetch(billyPath+(billyQs||''),{method:billyMethod,headers:{'content-type':'application/json',...(billyToken?{authorization:'Bearer '+billyToken}:{})},body:billyBody?JSON.stringify(billyBody):undefined});
+  const billyJ=await billyR.json().catch(()=>({}));
+  if(billyR.status===401&&billyToken){billyShowAuth('Session expired. Please log in again.');throw new Error('Please log in')}
+  if(!billyR.ok)throw new Error(billyJ.error||('Server error '+billyR.status));
+  return billyJ;
 }
-async function authSubmit(action){
-  const u=$('au').value.trim(),p=$('ap').value;
-  $('authMsg').className='billy-status';$('authMsg').textContent='Please wait…';
+async function billyAuthSubmit(billyAction){
+  const billyU=billyEl('au').value.trim(),billyP=billyEl('ap').value;
+  billyEl('authMsg').className='billy-status';billyEl('authMsg').textContent='Please wait…';
   try{
-    const j=await call('/api/auth','POST',{action,username:u,password:p});
-    token=j.token;username=j.username;
-    localStorage.setItem('cl_token',token);localStorage.setItem('cl_user',username);
-    $('ap').value='';showApp();
-  }catch(e){$('authMsg').className='billy-status billy-bad';$('authMsg').textContent='⚠️ '+e.message}
+    const billyJ=await billyCall('/api/auth','POST',{action:billyAction,username:billyU,password:billyP});
+    billyToken=billyJ.token;billyUsername=billyJ.username;
+    localStorage.setItem('cl_token',billyToken);localStorage.setItem('cl_user',billyUsername);
+    billyEl('ap').value='';billyShowApp();
+  }catch(billyErr){billyEl('authMsg').className='billy-status billy-bad';billyEl('authMsg').textContent='⚠️ '+billyErr.message}
 }
-$('doLogin').onclick=()=>authSubmit('login');
-$('doReg').onclick=()=>authSubmit('register');
-$('ap').addEventListener('keydown',e=>{if(e.key==='Enter')authSubmit('login')});
-$('logout').onclick=async()=>{try{await call('/api/auth','POST',{action:'logout'})}catch(e){}
-  localStorage.removeItem('cl_user');records=[];showAuth('')};
+billyEl('doLogin').onclick=()=>billyAuthSubmit('login');
+billyEl('doReg').onclick=()=>billyAuthSubmit('register');
+billyEl('ap').addEventListener('keydown',billyEv=>{if(billyEv.key==='Enter')billyAuthSubmit('login')});
+billyEl('logout').onclick=async()=>{try{await billyCall('/api/auth','POST',{action:'logout'})}catch(billyErr){}
+  localStorage.removeItem('cl_user');billyRecords=[];billyShowAuth('')};
 
-/* billy wonder - load day from server */
-async function load(){
-  $('date').value=selected;status('Loading…');
-  try{const j=await call('/api/ledger','GET',null,'?date='+selected);records=j.records||[];status('Saved')}
-  catch(e){records=[];status('⚠️ '+e.message,true)}
-  render();
+async function billyLoad(){
+  billyDateLabel();billyStatus('Loading…');
+  try{const billyJ=await billyCall('/api/ledger','GET',null,'?date='+billySelected);billyRecords=billyJ.records||[];billyStatus('Saved')}
+  catch(billyErr){billyRecords=[];billyStatus('⚠️ '+billyErr.message,true)}
+  billyRender();
 }
-function render(){
-  const list=records.slice().sort((a,b)=>b.created-a.created);
-  const investment=list.reduce((s,x)=>s+x.buy*x.qty,0);
-  const revenue=list.reduce((s,x)=>s+x.sell*x.qty,0);
-  const profit=revenue-investment;
-  $('totalProfit').textContent=money(profit);
-  $('totalProfit').style.color=profit<0?'#ffe0e2':'white';
-  $('investment').textContent=money(investment);
-  $('revenue').textContent=money(revenue);
-  $('qtyTotal').textContent=list.reduce((s,x)=>s+x.qty,0);
-  $('entryTotal').textContent=list.length;
-  $('entries').innerHTML='';
-  if(!list.length){$('entries').innerHTML='<div class="empty">No entries for this date yet.</div>';return}
-  for(const x of list){
-    const p=(x.sell-x.buy)*x.qty;
-    const row=document.createElement('div');row.className='entry';
-    const desc=document.createElement('div');
-    const name=document.createElement('div');name.className='entryname';name.textContent=x.item+' ×'+x.qty;desc.append(name);
-    const detail=document.createElement('div');detail.className='sub';detail.textContent=money(x.buy)+' buy • '+money(x.sell)+' sell per item'+(x.note?' • '+x.note:'');desc.append(detail);
-    const val=document.createElement('div');val.className='entryprofit '+(p>=0?'pos':'neg');val.textContent=money(p);
-    const del=document.createElement('button');del.className='del';del.textContent='×';del.title='Delete entry';
-    del.addEventListener('click',async()=>{
-      if(!confirm('Delete "'+x.item+'" entry?'))return;
-      try{status('Deleting…');const j=await call('/api/ledger','DELETE',{date:selected,id:x.id});records=j.records;status('Saved')}
-      catch(e){status('⚠️ '+e.message,true)}
-      render();
+function billyRender(){
+  const billyList=billyRecords.slice().sort((billyA,billyB)=>billyB.created-billyA.created);
+  const billyInvestment=billyList.reduce((billyS,billyX)=>billyS+billyX.buy*billyX.qty,0);
+  const billyRevenue=billyList.reduce((billyS,billyX)=>billyS+billyX.sell*billyX.qty,0);
+  const billyProfit=billyRevenue-billyInvestment;
+  billyEl('totalProfit').textContent=billyMoney(billyProfit);
+  billyEl('totalProfit').style.color=billyProfit<0?'#ffe0e2':'white';
+  billyEl('investment').textContent=billyMoney(billyInvestment);
+  billyEl('revenue').textContent=billyMoney(billyRevenue);
+  billyEl('qtyTotal').textContent=billyList.reduce((billyS,billyX)=>billyS+billyX.qty,0);
+  billyEl('entryTotal').textContent=billyList.length;
+  billyEl('entries').innerHTML='';
+  if(!billyList.length){billyEl('entries').innerHTML='<div class="billy-empty">No entries for this date yet.</div>';return}
+  for(const billyX of billyList){
+    const billyP=(billyX.sell-billyX.buy)*billyX.qty;
+    const billyRow=document.createElement('div');billyRow.className='billy-entry';
+    const billyDesc=document.createElement('div');
+    const billyName=document.createElement('div');billyName.className='billy-entryname';billyName.textContent=billyX.item+' ×'+billyX.qty;billyDesc.append(billyName);
+    const billyDetail=document.createElement('div');billyDetail.className='billy-sub';billyDetail.textContent=billyMoney(billyX.buy)+' buy • '+billyMoney(billyX.sell)+' sell per item'+(billyX.note?' • '+billyX.note:'');billyDesc.append(billyDetail);
+    const billyVal=document.createElement('div');billyVal.className='billy-entryprofit '+(billyP>=0?'billy-pos':'billy-neg');billyVal.textContent=billyMoney(billyP);
+    const billyDel=document.createElement('button');billyDel.className='billy-del';billyDel.textContent='×';billyDel.title='Delete entry';
+    billyDel.addEventListener('click',async()=>{
+      if(!confirm('Delete "'+billyX.item+'" entry?'))return;
+      try{billyStatus('Deleting…');const billyJ=await billyCall('/api/ledger','DELETE',{date:billySelected,id:billyX.id});billyRecords=billyJ.records;billyStatus('Saved')}
+      catch(billyErr){billyStatus('⚠️ '+billyErr.message,true)}
+      billyRender();
     });
-    row.append(desc,val,del);$('entries').append(row);
+    billyRow.append(billyDesc,billyVal,billyDel);billyEl('entries').append(billyRow);
   }
 }
-$('add').addEventListener('click',async()=>{
-  const item=$('item').value.trim(),buy=Number($('buy').value),sell=Number($('sell').value),qty=Number($('qty').value);
-  if(!item){alert('Please enter item name.');$('item').focus();return}
-  if($('buy').value===''||$('sell').value===''||!Number.isFinite(buy)||!Number.isFinite(sell)||buy<0||sell<0){alert('Enter valid buy and sell prices.');return}
-  if(!Number.isInteger(qty)||qty<1){alert('Quantity must be at least 1.');return}
-  const rec={id:Date.now().toString()+Math.random().toString(16).slice(2),date:selected,item,buy,sell,qty,note:$('note').value.trim(),created:Date.now()};
-  $('add').disabled=true;status('Saving…');
+billyEl('add').addEventListener('click',async()=>{
+  const billyItem=billyEl('item').value.trim(),billyBuy=Number(billyEl('buy').value),billySell=Number(billyEl('sell').value),billyQty=Number(billyEl('qty').value);
+  if(!billyItem){alert('Please enter item name.');billyEl('item').focus();return}
+  if(billyEl('buy').value===''||billyEl('sell').value===''||!Number.isFinite(billyBuy)||!Number.isFinite(billySell)||billyBuy<0||billySell<0){alert('Enter valid buy and sell prices.');return}
+  if(!Number.isInteger(billyQty)||billyQty<1){alert('Quantity must be at least 1.');return}
+  const billyRec={id:Date.now().toString()+Math.random().toString(16).slice(2),date:billySelected,item:billyItem,buy:billyBuy,sell:billySell,qty:billyQty,note:billyEl('note').value.trim(),created:Date.now()};
+  billyEl('add').disabled=true;billyStatus('Saving…');
   try{
-    const j=await call('/api/ledger','POST',{record:rec});records=j.records;status('Saved');
-    $('item').value='';$('note').value='';$('qty').value='1';render();$('item').focus();
-  }catch(e){status('⚠️ Not saved: '+e.message,true)}
-  $('add').disabled=false;
+    const billyJ=await billyCall('/api/ledger','POST',{record:billyRec});billyRecords=billyJ.records;billyStatus('Saved');
+    billyEl('item').value='';billyEl('note').value='';billyEl('qty').value='';billyRender();billyEl('item').focus();
+  }catch(billyErr){billyStatus('⚠️ Not saved: '+billyErr.message,true)}
+  billyEl('add').disabled=false;
 });
-$('date').addEventListener('change',e=>{if(e.target.value){selected=e.target.value;load()}});
-function move(days){const d=new Date(selected+'T12:00:00');d.setDate(d.getDate()+days);selected=localKey(d);load()}
-$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('today').onclick=()=>{selected=localKey(new Date());load()};
-token?showApp():showAuth('');
+function billyMove(billyDays){const billyD=new Date(billySelected+'T12:00:00');billyD.setDate(billyD.getDate()+billyDays);billySelected=billyLocalKey(billyD);billyLoad()}
+billyEl('prev').onclick=()=>billyMove(-1);billyEl('next').onclick=()=>billyMove(1);billyEl('today').onclick=()=>{billySelected=billyLocalKey(new Date());billyLoad()};
+/* billy wonder - calendar with daily profit / loss */
+const billyMonths=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let billyCalMonth=billySelected.slice(0,7);
+let billyCalData={};
+function billyDateLabel(){
+  billyEl('dateBtn').textContent='📅 '+new Date(billySelected+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+function billyShort(billyN){
+  const billyA=Math.abs(billyN);
+  const billyT=billyA>=1000?(billyA/1000).toFixed(1)+'k':(Number.isInteger(billyA)?String(billyA):billyA.toFixed(1));
+  return (billyN>0?'+':billyN<0?'-':'')+billyT;
+}
+async function billyCalOpen(){
+  billyCalMonth=billySelected.slice(0,7);
+  billyEl('calOverlay').classList.remove('billy-hide');
+  await billyCalLoad();
+}
+async function billyCalLoad(){
+  billyCalData={};billyCalDraw(true);
+  try{const billyJ=await billyCall('/api/ledger','GET',null,'?month='+billyCalMonth);billyCalData=billyJ.days||{}}
+  catch(billyErr){billyCalData={}}
+  billyCalDraw(false);
+}
+function billyCalShift(billyN){
+  const billyY=Number(billyCalMonth.slice(0,4)),billyM=Number(billyCalMonth.slice(5,7));
+  const billyD=new Date(billyY,billyM-1+billyN,1);
+  billyCalMonth=billyD.getFullYear()+'-'+billyPad(billyD.getMonth()+1);
+  billyCalLoad();
+}
+function billyCalDraw(billyLoading){
+  const billyY=Number(billyCalMonth.slice(0,4)),billyM=Number(billyCalMonth.slice(5,7));
+  billyEl('calTitle').textContent=billyMonths[billyM-1]+' '+billyY;
+  const billyGrid=billyEl('calGrid');billyGrid.innerHTML='';
+  const billyFirst=new Date(billyY,billyM-1,1).getDay();
+  const billyCount=new Date(billyY,billyM,0).getDate();
+  const billyToday=billyLocalKey(new Date());
+  let billyTotal=0,billyWin=0,billyLoss=0;
+  for(let billyI=0;billyI<billyFirst;billyI++){const billyB=document.createElement('div');billyB.className='billy-calblank';billyGrid.append(billyB)}
+  for(let billyDay=1;billyDay<=billyCount;billyDay++){
+    const billyKey=billyCalMonth+'-'+billyPad(billyDay);
+    const billyInfo=billyCalData[billyKey];
+    const billyBtn=document.createElement('button');
+    let billyCls='billy-calcell';
+    const billyNum=document.createElement('i');billyNum.textContent=billyDay;billyBtn.append(billyNum);
+    const billyAmt=document.createElement('small');
+    if(billyInfo){
+      const billyP=Math.round(billyInfo.profit*100)/100;
+      billyTotal+=billyP;
+      if(billyP>0){billyCls+=' billy-gain';billyWin++}else if(billyP<0){billyCls+=' billy-lose';billyLoss++}else billyCls+=' billy-flat';
+      billyAmt.textContent=billyShort(billyP);
+    }else billyAmt.textContent='';
+    if(billyKey===billyToday)billyCls+=' billy-now';
+    if(billyKey===billySelected)billyCls+=' billy-pick';
+    billyBtn.className=billyCls;billyBtn.append(billyAmt);
+    billyBtn.addEventListener('click',()=>{billySelected=billyKey;billyEl('calOverlay').classList.add('billy-hide');billyLoad()});
+    billyGrid.append(billyBtn);
+  }
+  billyEl('calSum').innerHTML='';
+  const billyL=document.createElement('div');billyL.innerHTML='Month total<br>';
+  const billyB=document.createElement('b');billyB.textContent=billyLoading?'…':billyMoney(Math.round(billyTotal*100)/100);
+  billyB.style.color=billyTotal<0?'#ff8a93':billyTotal>0?'#4fe3b0':'#fff';billyL.append(billyB);
+  const billyR=document.createElement('div');billyR.style.textAlign='right';
+  billyR.textContent=billyLoading?'':billyWin+' profit day'+(billyWin===1?'':'s')+' • '+billyLoss+' loss day'+(billyLoss===1?'':'s');
+  billyEl('calSum').append(billyL,billyR);
+}
+billyEl('dateBtn').onclick=billyCalOpen;
+billyEl('calPrev').onclick=()=>billyCalShift(-1);
+billyEl('calNext').onclick=()=>billyCalShift(1);
+billyEl('calClose').onclick=()=>billyEl('calOverlay').classList.add('billy-hide');
+billyEl('calOverlay').addEventListener('click',billyEv=>{if(billyEv.target===billyEl('calOverlay'))billyEl('calOverlay').classList.add('billy-hide')});
+billyToken?billyShowApp():billyShowAuth('');
 </script>
 </body>
 </html>
