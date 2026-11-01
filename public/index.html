@@ -200,7 +200,7 @@ billyEl('add').addEventListener('click',async()=>{
   billyEl('add').disabled=true;billyStatus('Saving…');
   try{
     const billyJ=await billyCall('/api/ledger','POST',{record:billyRec});billyRecords=billyJ.records;billyStatus('Saved');
-    billyEl('item').value='';billyEl('note').value='';billyEl('qty').value='';billyRender();billyEl('item').focus();
+    billyEl('item').value='';billyEl('note').value='';billyEl('qty').value='';billyEl('buy').value='';billyEl('sell').value='';billyRender();billyEl('item').focus();
   }catch(billyErr){billyStatus('⚠️ Not saved: '+billyErr.message,true)}
   billyEl('add').disabled=false;
 });
