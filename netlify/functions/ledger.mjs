@@ -3,111 +3,128 @@ import { getStore } from "@netlify/blobs";
 import { scrypt, randomBytes, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 
-const scryptAsync = promisify(scrypt);
-const json = (obj, status = 200) =>
-  new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json" } });
+const billyScrypt = promisify(scrypt);
+const billyJson = (billyObj, billyCode = 200) =>
+  new Response(JSON.stringify(billyObj), { status: billyCode, headers: { "content-type": "application/json" } });
 
-const isDate = (d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d);
-const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : null);
-const SESSION_MS = 90 * 24 * 3600 * 1000;
+const billyIsDate = (billyD) => typeof billyD === "string" && /^\d{4}-\d{2}-\d{2}$/.test(billyD);
+const billyNum = (billyV) => (typeof billyV === "number" && Number.isFinite(billyV) ? billyV : null);
+const BILLY_SESSION_MS = 90 * 24 * 3600 * 1000;
 
-const users = () => getStore({ name: "users", consistency: "strong" });
-const sessions = () => getStore({ name: "sessions", consistency: "strong" });
-const ledger = () => getStore({ name: "ledger", consistency: "strong" });
+const billyUsers = () => getStore({ name: "users", consistency: "strong" });
+const billySessions = () => getStore({ name: "sessions", consistency: "strong" });
+const billyLedger = () => getStore({ name: "ledger", consistency: "strong" });
 
-async function hashPw(password, salt) {
-  return (await scryptAsync(password, salt, 64)).toString("hex");
+async function billyHashPw(billyPw, billySalt) {
+  return (await billyScrypt(billyPw, billySalt, 64)).toString("hex");
 }
 
-async function auth(req) {
-  const m = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.get("authorization") || "");
-  if (!m) return null;
-  const s = await sessions().get("tok:" + m[1], { type: "json" });
-  if (!s || s.exp < Date.now()) return null;
-  return { username: s.u, token: m[1] };
+async function billyAuth(billyReq) {
+  const billyM = /^Bearer ([a-f0-9]{64})$/.exec(billyReq.headers.get("authorization") || "");
+  if (!billyM) return null;
+  const billyS = await billySessions().get("tok:" + billyM[1], { type: "json" });
+  if (!billyS || billyS.exp < Date.now()) return null;
+  return { username: billyS.u, token: billyM[1] };
 }
 
-async function handleAuth(req) {
-  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
-  const b = await req.json().catch(() => ({}));
+async function billyHandleAuth(billyReq) {
+  if (billyReq.method !== "POST") return billyJson({ error: "Method not allowed" }, 405);
+  const billyB = await billyReq.json().catch(() => ({}));
 
-  if (b.action === "logout") {
-    const a = await auth(req);
-    if (a) await sessions().delete("tok:" + a.token);
-    return json({ ok: true });
+  if (billyB.action === "logout") {
+    const billyA = await billyAuth(billyReq);
+    if (billyA) await billySessions().delete("tok:" + billyA.token);
+    return billyJson({ ok: true });
   }
 
-  const username = String(b.username || "").trim().toLowerCase();
-  const password = String(b.password || "");
-  if (!/^[a-z0-9_]{3,20}$/.test(username))
-    return json({ error: "Username: 3-20 letters, numbers or _ only" }, 400);
-  if (password.length < 6 || password.length > 100)
-    return json({ error: "Password must be at least 6 characters" }, 400);
+  const billyName = String(billyB.username || "").trim().toLowerCase();
+  const billyPw = String(billyB.password || "");
+  if (!/^[a-z0-9_]{3,20}$/.test(billyName))
+    return billyJson({ error: "Username: 3-20 letters, numbers or _ only" }, 400);
+  if (billyPw.length < 6 || billyPw.length > 100)
+    return billyJson({ error: "Password must be at least 6 characters" }, 400);
 
-  const key = "user:" + username;
-  if (b.action === "register") {
-    if (await users().get(key)) return json({ error: "Username already taken" }, 409);
-    const salt = randomBytes(16).toString("hex");
-    await users().setJSON(key, { username, salt, hash: await hashPw(password, salt), created: Date.now() });
-  } else if (b.action === "login") {
-    const u = await users().get(key, { type: "json" });
-    const ok = u && timingSafeEqual(Buffer.from(await hashPw(password, u.salt), "hex"), Buffer.from(u.hash, "hex"));
-    if (!ok) return json({ error: "Wrong username or password" }, 401);
-  } else return json({ error: "Bad request" }, 400);
+  const billyKey = "user:" + billyName;
+  if (billyB.action === "register") {
+    if (await billyUsers().get(billyKey)) return billyJson({ error: "Username already taken" }, 409);
+    const billySalt = randomBytes(16).toString("hex");
+    await billyUsers().setJSON(billyKey, {
+      username: billyName, salt: billySalt, hash: await billyHashPw(billyPw, billySalt), created: Date.now(),
+    });
+  } else if (billyB.action === "login") {
+    const billyU = await billyUsers().get(billyKey, { type: "json" });
+    const billyOk = billyU && timingSafeEqual(
+      Buffer.from(await billyHashPw(billyPw, billyU.salt), "hex"), Buffer.from(billyU.hash, "hex"));
+    if (!billyOk) return billyJson({ error: "Wrong username or password" }, 401);
+  } else return billyJson({ error: "Bad request" }, 400);
 
-  const token = randomBytes(32).toString("hex");
-  await sessions().setJSON("tok:" + token, { u: username, exp: Date.now() + SESSION_MS });
-  return json({ token, username });
+  const billyTok = randomBytes(32).toString("hex");
+  await billySessions().setJSON("tok:" + billyTok, { u: billyName, exp: Date.now() + BILLY_SESSION_MS });
+  return billyJson({ token: billyTok, username: billyName });
 }
 
-async function handleLedger(req) {
-  const a = await auth(req);
-  if (!a) return json({ error: "Please log in" }, 401);
-  const store = ledger();
-  const url = new URL(req.url);
-  const dayKey = (date) => `${a.username}/day:${date}`;
+async function billyHandleLedger(billyReq) {
+  const billyA = await billyAuth(billyReq);
+  if (!billyA) return billyJson({ error: "Please log in" }, 401);
+  const billyStore = billyLedger();
+  const billyUrl = new URL(billyReq.url);
+  const billyDayKey = (billyDate) => `${billyA.username}/day:${billyDate}`;
 
-  if (req.method === "GET") {
-    const date = url.searchParams.get("date");
-    if (!isDate(date)) return json({ error: "Bad date" }, 400);
-    return json({ records: (await store.get(dayKey(date), { type: "json" })) || [] });
+  if (billyReq.method === "GET") {
+    const billyMonth = billyUrl.searchParams.get("month");
+    if (billyMonth) {
+      if (!/^\d{4}-\d{2}$/.test(billyMonth)) return billyJson({ error: "Bad month" }, 400);
+      const billyList = await billyStore.list({ prefix: `${billyA.username}/day:${billyMonth}` });
+      const billyDays = {};
+      await Promise.all(billyList.blobs.map(async (billyBlob) => {
+        const billyItems = (await billyStore.get(billyBlob.key, { type: "json" })) || [];
+        if (!billyItems.length) return;
+        const billyProfit = billyItems.reduce((billyT, billyI) => billyT + (billyI.sell - billyI.buy) * billyI.qty, 0);
+        billyDays[billyBlob.key.split("day:")[1]] = { profit: Math.round(billyProfit * 100) / 100, count: billyItems.length };
+      }));
+      return billyJson({ days: billyDays });
+    }
+    const billyDate = billyUrl.searchParams.get("date");
+    if (!billyIsDate(billyDate)) return billyJson({ error: "Bad date" }, 400);
+    return billyJson({ records: (await billyStore.get(billyDayKey(billyDate), { type: "json" })) || [] });
   }
 
-  const body = await req.json().catch(() => ({}));
+  const billyBody = await billyReq.json().catch(() => ({}));
 
-  if (req.method === "POST") {
-    const r = body.record || {};
-    const buy = num(r.buy), sell = num(r.sell), qty = num(r.qty);
-    if (!isDate(r.date) || typeof r.id !== "string" || typeof r.item !== "string" || !r.item.trim()
-        || buy === null || sell === null || qty === null || buy < 0 || sell < 0 || qty < 1)
-      return json({ error: "Invalid entry" }, 400);
-    const rec = {
-      id: r.id.slice(0, 60), date: r.date, item: r.item.trim().slice(0, 70),
-      buy, sell, qty: Math.floor(qty), note: String(r.note || "").slice(0, 120),
-      created: num(r.created) ?? Date.now(),
+  if (billyReq.method === "POST") {
+    const billyR = billyBody.record || {};
+    const billyBuy = billyNum(billyR.buy), billySell = billyNum(billyR.sell), billyQty = billyNum(billyR.qty);
+    if (!billyIsDate(billyR.date) || typeof billyR.id !== "string" || typeof billyR.item !== "string" || !billyR.item.trim()
+        || billyBuy === null || billySell === null || billyQty === null || billyBuy < 0 || billySell < 0 || billyQty < 1)
+      return billyJson({ error: "Invalid entry" }, 400);
+    const billyRec = {
+      id: billyR.id.slice(0, 60), date: billyR.date, item: billyR.item.trim().slice(0, 70),
+      buy: billyBuy, sell: billySell, qty: Math.floor(billyQty), note: String(billyR.note || "").slice(0, 120),
+      created: billyNum(billyR.created) ?? Date.now(),
     };
-    const records = (await store.get(dayKey(rec.date), { type: "json" })) || [];
-    if (!records.some((x) => x.id === rec.id)) records.push(rec);
-    await store.setJSON(dayKey(rec.date), records);
-    return json({ records });
+    const billyRecords = (await billyStore.get(billyDayKey(billyRec.date), { type: "json" })) || [];
+    if (!billyRecords.some((billyX) => billyX.id === billyRec.id)) billyRecords.push(billyRec);
+    await billyStore.setJSON(billyDayKey(billyRec.date), billyRecords);
+    return billyJson({ records: billyRecords });
   }
 
-  if (req.method === "DELETE") {
-    if (!isDate(body.date)) return json({ error: "Bad date" }, 400);
-    const records = ((await store.get(dayKey(body.date), { type: "json" })) || []).filter((x) => x.id !== body.id);
-    await store.setJSON(dayKey(body.date), records);
-    return json({ records });
+  if (billyReq.method === "DELETE") {
+    if (!billyIsDate(billyBody.date)) return billyJson({ error: "Bad date" }, 400);
+    const billyRecords = ((await billyStore.get(billyDayKey(billyBody.date), { type: "json" })) || [])
+      .filter((billyX) => billyX.id !== billyBody.id);
+    await billyStore.setJSON(billyDayKey(billyBody.date), billyRecords);
+    return billyJson({ records: billyRecords });
   }
 
-  return json({ error: "Method not allowed" }, 405);
+  return billyJson({ error: "Method not allowed" }, 405);
 }
 
-export default async (req) => {
+export default async (billyReq) => {
   try {
-    const path = new URL(req.url).pathname;
-    return path.startsWith("/api/auth") ? await handleAuth(req) : await handleLedger(req);
-  } catch (e) {
-    return json({ error: "Server error: " + e.message }, 500);
+    const billyPath = new URL(billyReq.url).pathname;
+    return billyPath.startsWith("/api/auth") ? await billyHandleAuth(billyReq) : await billyHandleLedger(billyReq);
+  } catch (billyErr) {
+    return billyJson({ error: "Server error: " + billyErr.message }, 500);
   }
 };
 
