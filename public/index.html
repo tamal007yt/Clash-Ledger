@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#10182b">
+<title>ClashLedger</title>
+<style>
+:root{--bg:#10182b;--panel:#1e2a40;--field:#10182b;--line:#34415a;--blue:#35b8f5;--green:#12b886;--red:#e05260;--muted:#9aa8bd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px}
+header{max-width:720px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:850;font-size:22px;letter-spacing:.3px}.brand span{color:var(--blue)}
+main{max-width:720px;margin:auto;background:var(--panel);border:1px solid #2b3850;border-radius:25px;padding:18px;box-shadow:0 16px 40px #0003}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+h1{font-size:22px;color:var(--blue);margin:0}
+button,input{font:inherit}button{border:0;cursor:pointer}
+.datebtn{background:var(--field);border:1px solid var(--line);border-radius:12px;color:var(--blue);padding:10px 12px}
+.profit{background:linear-gradient(120deg,#078bcb,#2464e8);border-radius:21px;padding:20px;margin-bottom:12px}
+.profit small{font-weight:750;letter-spacing:.5px;color:#e1f5ff}.amount{font-size:38px;font-weight:850;margin-top:5px;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 20px}
+.stat{background:var(--field);padding:13px;border-radius:14px;min-width:0}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:19px;margin-top:4px;overflow-wrap:anywhere}
+h2{font-size:16px;margin:20px 0 10px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+input{width:100%;background:var(--field);color:white;border:1px solid var(--line);border-radius:13px;padding:14px;outline:none;min-width:0}
+input:focus{border-color:var(--blue)}input::placeholder{color:#78859b}
+.primary{width:100%;padding:15px;border-radius:14px;background:var(--green);color:white;font-weight:800;margin-top:10px}
+.tablehead,.entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center}
+.tablehead{color:var(--muted);font-size:12px;font-weight:750;padding:0 8px 8px}
+.entry{background:var(--field);border:1px solid #2b3850;border-radius:14px;padding:11px 8px 11px 12px;margin-bottom:8px}
+.entryname{font-weight:750;overflow-wrap:anywhere}.sub{font-size:10px;color:#8794a9;margin-top:3px}
+.entryprofit{font-weight:800;white-space:nowrap}.pos{color:#32d296}.neg{color:#ff6b75}
+.del{background:#422632;color:#ff7580;border-radius:10px;padding:8px 10px;font-size:17px}
+.empty{text-align:center;color:#8995a9;padding:25px 5px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+.nav button{background:#26354d;color:#dce8f8;border-radius:10px;padding:9px 13px}
+/* billy wonder - login/logout + status styles */
+.billy-status{font-size:12px;margin-top:12px;text-align:center;color:var(--muted)}.billy-status.billy-bad{color:#ffb4ba}
+.billy-hide{display:none!important}.billy-who{display:flex;align-items:center;gap:8px;font-size:12px;color:#9fb0c8}.billy-who button{background:#26354d;color:#dce8f8;border-radius:9px;padding:6px 10px;font-size:12px}
+.foot{text-align:center;color:#748198;font-size:11px;margin:14px auto 0;max-width:720px}
+@media(max-width:420px){body{padding:10px}main{padding:13px}.top{align-items:flex-start;flex-direction:column}h1{font-size:21px}.datebtn{align-self:flex-end}.amount{font-size:34px}.entry{gap:5px;padding-left:9px}.entryprofit{font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="brand">⚔️ <span>Clash</span>Ledger</div><div id="who" class="billy-who billy-hide"><span id="uname"></span><button id="logout">Logout</button></div></header>
+<!-- billy wonder: login box -->
+<main id="authBox">
+  <h1 style="margin-bottom:6px">Welcome</h1>
+  <div style="color:var(--muted);font-size:13px;margin-bottom:14px">Log in, or create an account. Each account sees only its own ledger.</div>
+  <input id="au" placeholder="Username" autocomplete="username" maxlength="20" autocapitalize="none">
+  <input id="ap" type="password" placeholder="Password (min 6)" autocomplete="current-password" style="margin-top:9px">
+  <button class="primary" id="doLogin">Login</button>
+  <button class="primary" id="doReg" style="background:#26354d">Create account</button>
+  <div id="authMsg" class="billy-status"></div>
+</main>
+<main id="app" class="billy-hide">
+  <div class="top">
+    <h1>Accounts Ledger</h1>
+    <input id="date" class="datebtn" type="date" aria-label="Choose date">
+  </div>
+  <section class="profit"><small>SELECTED DAY'S NET PROFIT</small><div id="totalProfit" class="amount">$0.00</div></section>
+  <section class="stats">
+    <div class="stat"><small>Total Investment</small><strong id="investment">$0.00</strong></div>
+    <div class="stat"><small>Total Revenue</small><strong id="revenue">$0.00</strong></div>
+    <div class="stat"><small>Items Sold</small><strong id="qtyTotal">0</strong></div>
+    <div class="stat"><small>Entries</small><strong id="entryTotal">0</strong></div>
+  </section>
+  <h2>Add Trading Entry</h2>
+  <div class="formgrid">
+    <input id="item" placeholder="Item (e.g. Gold Pass)" maxlength="70">
+    <input id="qty" type="number" min="1" step="1" value="1" placeholder="Quantity">
+    <input id="buy" type="number" min="0" step="0.01" value="5" placeholder="Buy price ($)">
+    <input id="sell" type="number" min="0" step="0.01" value="6" placeholder="Sell price ($)">
+  </div>
+  <input id="note" style="margin-top:9px" placeholder="Note (optional)" maxlength="120">
+  <button class="primary" id="add">＋ Add Entry</button>
+  <h2>Daily Entries</h2>
+  <div class="tablehead"><span>Item Description</span><span>Profit / Loss</span><span></span></div>
+  <div id="entries"></div>
+  <div id="status" class="billy-status"></div>
+  <div class="nav"><button id="prev">← Previous</button><button id="today">Today</button><button id="next">Next →</button></div>
+</main>
+<div class="foot">Saved online in your Netlify database</div>
+<script>
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const localKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+let selected=localKey(new Date());
+let records=[];
+/* billy wonder - login + online save */
+let token=localStorage.getItem('cl_token')||'';
+let username=localStorage.getItem('cl_user')||'';
+$('date').value=selected;
+const money=n=>(n<0?'-$':'$')+Math.abs(n).toFixed(2);
+function status(msg,bad){const e=$('status');e.textContent=msg;e.className='billy-status'+(bad?' billy-bad':'')}
+
+// show login screen
+function showAuth(msg){
+  token='';localStorage.removeItem('cl_token');
+  $('app').classList.add('billy-hide');$('who').classList.add('billy-hide');$('authBox').classList.remove('billy-hide');
+  $('authMsg').textContent=msg||'';$('authMsg').className='billy-status'+(msg?' billy-bad':'');
+}
+function showApp(){
+  $('authBox').classList.add('billy-hide');$('app').classList.remove('billy-hide');$('who').classList.remove('billy-hide');
+  $('uname').textContent='👤 '+username;load();
+}
+// talks to the netlify function
+async function call(path,method,body,qs){
+  const r=await fetch(path+(qs||''),{method,headers:{'content-type':'application/json',...(token?{authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(r.status===401&&token){showAuth('Session expired. Please log in again.');throw new Error('Please log in')}
+  if(!r.ok)throw new Error(j.error||('Server error '+r.status));
+  return j;
+}
+async function authSubmit(action){
+  const u=$('au').value.trim(),p=$('ap').value;
+  $('authMsg').className='billy-status';$('authMsg').textContent='Please wait…';
+  try{
+    const j=await call('/api/auth','POST',{action,username:u,password:p});
+    token=j.token;username=j.username;
+    localStorage.setItem('cl_token',token);localStorage.setItem('cl_user',username);
+    $('ap').value='';showApp();
+  }catch(e){$('authMsg').className='billy-status billy-bad';$('authMsg').textContent='⚠️ '+e.message}
+}
+$('doLogin').onclick=()=>authSubmit('login');
+$('doReg').onclick=()=>authSubmit('register');
+$('ap').addEventListener('keydown',e=>{if(e.key==='Enter')authSubmit('login')});
+$('logout').onclick=async()=>{try{await call('/api/auth','POST',{action:'logout'})}catch(e){}
+  localStorage.removeItem('cl_user');records=[];showAuth('')};
+
+/* billy wonder - load day from server */
+async function load(){
+  $('date').value=selected;status('Loading…');
+  try{const j=await call('/api/ledger','GET',null,'?date='+selected);records=j.records||[];status('Saved')}
+  catch(e){records=[];status('⚠️ '+e.message,true)}
+  render();
+}
+function render(){
+  const list=records.slice().sort((a,b)=>b.created-a.created);
+  const investment=list.reduce((s,x)=>s+x.buy*x.qty,0);
+  const revenue=list.reduce((s,x)=>s+x.sell*x.qty,0);
+  const profit=revenue-investment;
+  $('totalProfit').textContent=money(profit);
+  $('totalProfit').style.color=profit<0?'#ffe0e2':'white';
+  $('investment').textContent=money(investment);
+  $('revenue').textContent=money(revenue);
+  $('qtyTotal').textContent=list.reduce((s,x)=>s+x.qty,0);
+  $('entryTotal').textContent=list.length;
+  $('entries').innerHTML='';
+  if(!list.length){$('entries').innerHTML='<div class="empty">No entries for this date yet.</div>';return}
+  for(const x of list){
+    const p=(x.sell-x.buy)*x.qty;
+    const row=document.createElement('div');row.className='entry';
+    const desc=document.createElement('div');
+    const name=document.createElement('div');name.className='entryname';name.textContent=x.item+' ×'+x.qty;desc.append(name);
+    const detail=document.createElement('div');detail.className='sub';detail.textContent=money(x.buy)+' buy • '+money(x.sell)+' sell per item'+(x.note?' • '+x.note:'');desc.append(detail);
+    const val=document.createElement('div');val.className='entryprofit '+(p>=0?'pos':'neg');val.textContent=money(p);
+    const del=document.createElement('button');del.className='del';del.textContent='×';del.title='Delete entry';
+    del.addEventListener('click',async()=>{
+      if(!confirm('Delete "'+x.item+'" entry?'))return;
+      try{status('Deleting…');const j=await call('/api/ledger','DELETE',{date:selected,id:x.id});records=j.records;status('Saved')}
+      catch(e){status('⚠️ '+e.message,true)}
+      render();
+    });
+    row.append(desc,val,del);$('entries').append(row);
+  }
+}
+$('add').addEventListener('click',async()=>{
+  const item=$('item').value.trim(),buy=Number($('buy').value),sell=Number($('sell').value),qty=Number($('qty').value);
+  if(!item){alert('Please enter item name.');$('item').focus();return}
+  if($('buy').value===''||$('sell').value===''||!Number.isFinite(buy)||!Number.isFinite(sell)||buy<0||sell<0){alert('Enter valid buy and sell prices.');return}
+  if(!Number.isInteger(qty)||qty<1){alert('Quantity must be at least 1.');return}
+  const rec={id:Date.now().toString()+Math.random().toString(16).slice(2),date:selected,item,buy,sell,qty,note:$('note').value.trim(),created:Date.now()};
+  $('add').disabled=true;status('Saving…');
+  try{
+    const j=await call('/api/ledger','POST',{record:rec});records=j.records;status('Saved');
+    $('item').value='';$('note').value='';$('qty').value='1';render();$('item').focus();
+  }catch(e){status('⚠️ Not saved: '+e.message,true)}
+  $('add').disabled=false;
+});
+$('date').addEventListener('change',e=>{if(e.target.value){selected=e.target.value;load()}});
+function move(days){const d=new Date(selected+'T12:00:00');d.setDate(d.getDate()+days);selected=localKey(d);load()}
+$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('today').onclick=()=>{selected=localKey(new Date());load()};
+token?showApp():showAuth('');
+</script>
+</body>
+</html>
